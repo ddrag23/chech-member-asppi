@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Scan from '@/pages/Index.vue'
+import Profile from '@/pages/Profile.vue'
 import PageNotFound from '@/pages/PageNotFound.vue'
 const routes = [
   {
@@ -8,6 +9,14 @@ const routes = [
     component: Scan,
     meta: {
       title: 'Scan Member',
+    },
+  },
+  {
+    path: '/profile/:no',
+    name: 'profile',
+    component: Profile,
+    meta: {
+      title: 'Profile Member',
     },
   },
   {
