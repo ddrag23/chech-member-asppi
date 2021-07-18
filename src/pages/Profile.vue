@@ -4,40 +4,47 @@
       class="row justify-content-center align-items-center"
       style="height: 100vh"
     >
-      <div class="col-9">
+      <div class="col-12 col-md-7">
         <div class="card">
           <div class="card-body">
-            <div v-if="error" class="text-center text-danger">
-              {{ error }}
-            </div>
+            <div v-if="loading"><Spinner /></div>
             <div v-else>
-              <div class="logo d-flex justify-content-center">
-                <img :src="foto" alt="" class="profile__image" />
+              <div v-if="error" class="text-center text-danger">
+                {{ error }}
               </div>
-              <table class="table table-striped mt-3" style="width: 100%">
-                <tbody>
-                  <tr>
-                    <td>Nama</td>
-                    <td>:</td>
-                    <td>{{ nama }}</td>
-                  </tr>
-                  <tr>
-                    <td>Email</td>
-                    <td>:</td>
-                    <td>{{ email }}</td>
-                  </tr>
-                  <tr>
-                    <td>Jenis Kelamin</td>
-                    <td>:</td>
-                    <td>{{ jns_kelamin === 1 ? "Laki-Laki" : "Perempuan" }}</td>
-                  </tr>
-                  <tr>
-                    <td>Status Keanggotaan</td>
-                    <td>:</td>
-                    <td>{{ active === 1 ? "Aktif" : "Non-aktif" }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div v-else>
+                <div class="logo d-flex justify-content-center">
+                  <img :src="foto" alt="" class="profile__image" />
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped mt-3" style="width: 100%">
+                    <tbody>
+                      <tr>
+                        <td>Nama</td>
+                        <td>:</td>
+                        <td>{{ nama }}</td>
+                      </tr>
+                      <tr>
+                        <td>Email</td>
+                        <td>:</td>
+                        <td>{{ email }}</td>
+                      </tr>
+                      <tr>
+                        <td>Jenis Kelamin</td>
+                        <td>:</td>
+                        <td>
+                          {{ jns_kelamin === 1 ? "Laki-Laki" : "Perempuan" }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Status Keanggotaan</td>
+                        <td>:</td>
+                        <td>{{ active === 1 ? "Aktif" : "Non-aktif" }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -55,8 +62,12 @@
 <script>
 import { onMounted, reactive, toRefs, ref } from "vue";
 import { useRoute } from "vue-router";
+import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
 export default {
+  components: {
+    Spinner,
+  },
   setup: () => {
     const profile = reactive({
       foto: "",
@@ -67,13 +78,16 @@ export default {
     });
     const error = ref("");
     const foto = ref("");
+    const loading = ref(false);
     const router = useRoute();
     const loadData = async () => {
       try {
+        loading.value = true;
         const param = router.params.no.replaceAll("-", ".");
         const url = `https://siska.asppi.or.id/api/member/detail/${param}`;
         const res = await axios.get(url);
         const data = res.data;
+        loading.value = false;
         if (data.error !== undefined) {
           error.value = data.error;
         } else {
@@ -85,13 +99,16 @@ export default {
         }
 
         console.log(profile);
-      } catch (err) {}
+      } catch (err) {
+        console.error(err);
+      }
     };
     onMounted(() => loadData());
     return {
       ...toRefs(profile),
       error,
       foto,
+      loading,
     };
   },
 };
