@@ -53,10 +53,11 @@
                     </qrcode-drop-zone>
                   </div>
                   <div v-if="qrFile" class="">
-                    <qrcode-capture @decode="onDecode" accept="image/*" capture>
-                      Drop Image in here
-                    </qrcode-capture>
-                    <!-- <input type="file" accept="image/*" /> -->
+                    <qrcode-capture
+                      @decode="onDecode"
+                      :multiple="false"
+                      capture="filesystem"
+                    ></qrcode-capture>
                   </div>
                 </div>
               </div>
@@ -68,7 +69,7 @@
   </div>
 </template>
 <script>
-import { reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import {
   QrcodeStream,
