@@ -53,7 +53,7 @@
                     </qr-dropzone>
                   </div>
                   <div v-if="qrFile" class="">
-                    <qr-capture @decode="onDecode" capture="user">
+                    <qr-capture @decode="onDecode" capture="evironment">
                       Drop Image in here
                     </qr-capture>
                   </div>
