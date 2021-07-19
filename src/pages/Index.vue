@@ -52,13 +52,14 @@
                       Drop Image in here
                     </qrcode-drop-zone>
                   </div>
-                  <!-- <div v-if="qrFile" class=""> -->
-                  <qrcode-capture
-                    @decode="onDecode"
-                    :multiple="false"
-                    class="form-control"
-                  ></qrcode-capture>
-                  <!-- </div> -->
+                  <div v-if="qrFile">
+                    <qrcode-capture
+                      @decode="onDecode"
+                      :multiple="false"
+                      ref="q"
+                      class="form-control"
+                    ></qrcode-capture>
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,6 +89,7 @@ export default {
     const qrDnd = ref(false);
     const qrFile = ref(false);
     const error = ref("");
+    const q = ref();
     const showQrStream = () => {
       if (qrDnd.value) {
         qrDnd.value = false;
@@ -114,6 +116,14 @@ export default {
         qrDnd.value = false;
       }
       qrFile.value = !qrFile.value;
+      setTimeout(
+        () =>
+          document
+            .querySelector('input[type="file"]')
+            .removeAttribute("capture"),
+        100
+      );
+      console.log(q.value);
     };
     const onDecode = (data) => {
       router.push({
@@ -123,11 +133,6 @@ export default {
         },
       });
     };
-    onMounted(() => {
-      console.log(
-        document.querySelector('input[type="file"]').removeAttribute("capture")
-      );
-    });
     const onInit = async (promise) => {
       try {
         await promise;
@@ -159,6 +164,7 @@ export default {
       onDecode,
       error,
       onInit,
+      q,
     };
   },
 };
