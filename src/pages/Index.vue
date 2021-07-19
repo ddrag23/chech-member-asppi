@@ -52,13 +52,13 @@
                       Drop Image in here
                     </qrcode-drop-zone>
                   </div>
-                  <div v-if="qrFile" class="">
-                    <qrcode-capture
-                      @decode="onDecode"
-                      :multiple="false"
-                      capture="filesystem"
-                    ></qrcode-capture>
-                  </div>
+                  <!-- <div v-if="qrFile" class=""> -->
+                  <qrcode-capture
+                    @decode="onDecode"
+                    :multiple="false"
+                    class="form-control"
+                  ></qrcode-capture>
+                  <!-- </div> -->
                 </div>
               </div>
             </div>
@@ -123,6 +123,11 @@ export default {
         },
       });
     };
+    onMounted(() => {
+      console.log(
+        document.querySelector('input[type="file"]').removeAttribute("capture")
+      );
+    });
     const onInit = async (promise) => {
       try {
         await promise;
