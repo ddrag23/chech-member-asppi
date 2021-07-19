@@ -39,24 +39,24 @@
                 <div class="text-center text-danger mt-3">{{ error }}</div>
                 <div class="content__section">
                   <div v-if="qrStream">
-                    <qr-stream
+                    <qrcode-stream
                       style="width: 20em; height: 20em"
                       @decode="onDecode"
                       @init="onInit"
                     >
                       <div style="color: red" class="frame"></div>
-                    </qr-stream>
+                    </qrcode-stream>
                   </div>
                   <div v-if="qrDnd" class="dnd">
-                    <qr-dropzone @decode="onDecode">
+                    <qrcode-drop-zone @decode="onDecode">
                       Drop Image in here
-                    </qr-dropzone>
+                    </qrcode-drop-zone>
                   </div>
                   <div v-if="qrFile" class="">
-                    <qr-capture @decode="onDecode" capture="" accept="image/*">
+                    <qrcode-capture @decode="onDecode" accept="image/*">
                       Drop Image in here
-                    </qr-capture>
-                    <input type="file" accept="image/*" capture="" />
+                    </qrcode-capture>
+                    <!-- <input type="file" accept="image/*" /> -->
                   </div>
                 </div>
               </div>
@@ -70,12 +70,16 @@
 <script>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { QrStream, QrCapture, QrDropzone } from "vue3-qr-reader";
+import {
+  QrcodeStream,
+  QrcodeDropZone,
+  QrcodeCapture,
+} from "qrcode-reader-vue3";
 export default {
   components: {
-    QrStream,
-    QrCapture,
-    QrDropzone,
+    QrcodeStream,
+    QrcodeDropZone,
+    QrcodeCapture,
   },
   setup: () => {
     const router = useRouter();
