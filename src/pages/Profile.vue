@@ -20,26 +20,42 @@
                   <table class="table table-striped mt-3" style="width: 100%">
                     <tbody>
                       <tr>
-                        <td>Nama</td>
+                        <th>No Anggota</th>
+                        <td>:</td>
+                        <td>{{ no_urut }}</td>
+                      </tr>
+                      <tr>
+                        <th>Nama</th>
                         <td>:</td>
                         <td>{{ nama }}</td>
                       </tr>
                       <tr>
-                        <td>Email</td>
+                        <th>Asal DPD</th>
+                        <td>:</td>
+                        <td>{{ pusat }}</td>
+                      </tr>
+                      <tr>
+                        <th>Email</th>
                         <td>:</td>
                         <td>{{ email }}</td>
                       </tr>
                       <tr>
-                        <td>Jenis Kelamin</td>
+                        <th>Jenis Kelamin</th>
                         <td>:</td>
                         <td>
                           {{ jns_kelamin === 1 ? "Laki-Laki" : "Perempuan" }}
                         </td>
                       </tr>
                       <tr>
-                        <td>Status Keanggotaan</td>
+                        <th>Status Keanggotaan</th>
                         <td>:</td>
-                        <td>{{ active === 1 ? "Aktif" : "Non-aktif" }}</td>
+                        <td>
+                          {{
+                            active === 1
+                              ? `Aktif (${dateFormat(valid_date)})`
+                              : "Non-aktif"
+                          }}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -75,11 +91,69 @@ export default {
       active: "",
       email: "",
       jns_kelamin: "",
+      no_urut: "",
+      valid_date: "",
+      pusat: "",
     });
     const error = ref("");
     const foto = ref("");
     const loading = ref(false);
     const router = useRoute();
+    const dateFormat = (dateParams) => {
+      const date = new Date(dateParams);
+      const monthFormat = (month) => {
+        let resultMont = "";
+        switch (month) {
+          case 0:
+            resultMont = "Januari";
+            break;
+          case 1:
+            resultMont = "Februari";
+            break;
+          case 2:
+            resultMont = "Maret";
+            break;
+          case 3:
+            resultMont = "April";
+            break;
+          case 4:
+            resultMont = "Mei";
+            break;
+          case 5:
+            resultMont = "Juni";
+            break;
+          case 6:
+            resultMont = "Juli";
+            break;
+          case 7:
+            resultMont = "Agustus";
+            break;
+          case 8:
+            resultMont = "September";
+            break;
+          case 9:
+            resultMont = "Oktober";
+            break;
+          case 10:
+            resultMont = "November";
+            break;
+          case 11:
+            resultMont = "Desember";
+            break;
+          default:
+            resultMont = "Bulan tidak ada";
+            break;
+        }
+        return resultMont;
+      };
+      const format =
+        date.getDate() +
+        "-" +
+        monthFormat(date.getMonth()) +
+        "-" +
+        date.getFullYear();
+      return format;
+    };
     const loadData = async () => {
       try {
         loading.value = true;
@@ -91,11 +165,20 @@ export default {
         if (data.error !== undefined) {
           error.value = data.error;
         } else {
-          const allowed = ["foto", "nama", "active", "email", "jns_kelamin"];
+          const allowed = [
+            "foto",
+            "nama",
+            "active",
+            "email",
+            "jns_kelamin",
+            "valid_date",
+            "no_urut",
+          ];
           Object.entries(data.data_member)
             .filter(([key]) => allowed.includes(key))
             .map(([key]) => (profile[key] = data.data_member[key]));
           foto.value = data.photo_member;
+          profile.pusat = data.data_member.pusat.kd_name;
         }
 
         console.log(profile);
@@ -109,6 +192,7 @@ export default {
       error,
       foto,
       loading,
+      dateFormat,
     };
   },
 };
