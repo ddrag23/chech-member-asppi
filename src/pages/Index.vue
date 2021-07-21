@@ -10,6 +10,7 @@
                   src="../assets/logopdf.png"
                   class="asppi__logo"
                   alt="asppi logo"
+                  width="200"
                 />
                 <img
                   src="../assets/logologin.png"
@@ -53,12 +54,11 @@
                     </qrcode-drop-zone>
                   </div>
                   <div v-if="qrFile">
-                    <qrcode-capture
+                    <qr-capture
                       @decode="onDecode"
                       :multiple="false"
-                      ref="q"
                       class="form-control"
-                    ></qrcode-capture>
+                    ></qr-capture>
                   </div>
                 </div>
               </div>
@@ -77,11 +77,13 @@ import {
   QrcodeDropZone,
   QrcodeCapture,
 } from "qrcode-reader-vue3";
+import { QrStream, QrCapture, QrDropzone } from "vue3-qr-reader";
 export default {
   components: {
     QrcodeStream,
     QrcodeDropZone,
     QrcodeCapture,
+    QrCapture,
   },
   setup: () => {
     const router = useRouter();
@@ -89,7 +91,6 @@ export default {
     const qrDnd = ref(false);
     const qrFile = ref(false);
     const error = ref("");
-    const q = ref();
     const showQrStream = () => {
       if (qrDnd.value) {
         qrDnd.value = false;
@@ -123,7 +124,7 @@ export default {
             .removeAttribute("capture"),
         100
       );
-      console.log(q.value);
+      // console.log(q.value);
     };
     const onDecode = (data) => {
       router.push({
@@ -164,7 +165,6 @@ export default {
       onDecode,
       error,
       onInit,
-      q,
     };
   },
 };
@@ -217,7 +217,7 @@ export default {
     height: 150px;
   }
 }
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 1200px) {
   .asppi__Logo {
     width: 200px;
   }

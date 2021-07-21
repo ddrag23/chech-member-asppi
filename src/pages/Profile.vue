@@ -22,7 +22,7 @@
                       <tr>
                         <th>No Anggota</th>
                         <td>:</td>
-                        <td>{{ no_urut }}</td>
+                        <td>{{ `${kd_pst}.${kd_daerah}.${no_urut}` }}</td>
                       </tr>
                       <tr>
                         <th>Nama</th>
@@ -94,6 +94,8 @@ export default {
       no_urut: "",
       valid_date: "",
       pusat: "",
+      kd_pst: "",
+      kd_daerah: "",
     });
     const error = ref("");
     const foto = ref("");
@@ -173,6 +175,8 @@ export default {
             "jns_kelamin",
             "valid_date",
             "no_urut",
+            "kd_pst",
+            "kd_daerah",
           ];
           Object.entries(data.data_member)
             .filter(([key]) => allowed.includes(key))
